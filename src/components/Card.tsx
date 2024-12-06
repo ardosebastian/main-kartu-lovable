@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Timer } from "./Timer";
-
-interface Question {
-  type: "question" | "challenge";
-  text: string;
-  hasTimer: boolean;
-  duration?: number;
-}
+import type { Question } from "@/types";
 
 interface CardProps {
   onNext: () => void;
@@ -17,6 +11,13 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(question);
+
+  useEffect(() => {
+    if (!isFlipped) {
+      setCurrentQuestion(question);
+    }
+  }, [question, isFlipped]);
 
   const handleCardClick = () => {
     if (!isFlipped) {
@@ -53,7 +54,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
       >
         <div
           className={`w-full h-full transition-all duration-1000 transform-style-3d ${
-            isFlipped ? "rotate-y-180" : ""
+            isFlipped ? "animate-flip" : "animate-flip-back"
           }`}
         >
           {/* Front of card */}
@@ -74,13 +75,13 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
           >
             <div className="flex flex-col items-center justify-center h-full text-center">
               <h3 className="text-xl font-bold mb-4">
-                {question.type === "challenge" ? "Tantangan" : "Pertanyaan"}
+                {currentQuestion.type === "challenge" ? "Tantangan" : "Pertanyaan"}
               </h3>
               <p className="text-lg mb-6">
-                {question.text}
+                {currentQuestion.text}
               </p>
-              {showTimer && question.hasTimer && question.duration && (
-                <Timer duration={question.duration} onComplete={() => setShowTimer(false)} />
+              {showTimer && currentQuestion.hasTimer && currentQuestion.duration && (
+                <Timer duration={currentQuestion.duration} onComplete={() => setShowTimer(false)} />
               )}
             </div>
           </div>

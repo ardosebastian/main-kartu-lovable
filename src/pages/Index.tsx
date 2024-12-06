@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Card } from "@/components/Card";
+import type { Question } from "@/types";
 
 const questions: Question[] = [
   {

@@ -60,7 +60,7 @@ const questions: Question[] = [
   }
 ];
 
-const Index = () => {
+const Game = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
   const handleNext = () => {
@@ -70,4 +70,4 @@ const Index = () => {
   return <Card onNext={handleNext} question={questions[currentQuestion]} />;
 };
 
-export default Index;
+export default Game;

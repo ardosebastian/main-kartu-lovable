@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "@/components/Card";
 import type { Question } from "@/types";
+import { motion, AnimatePresence } from "framer-motion";
+
+<lov-add-dependency>framer-motion@latest</lov-add-dependency>
 
 const questions: Question[] = [
   {
@@ -62,12 +65,59 @@ const questions: Question[] = [
 
 const Game = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [showCard, setShowCard] = useState(false);
+
+  useEffect(() => {
+    // Show welcome message for 2 seconds, then fade in the card
+    const welcomeTimer = setTimeout(() => {
+      setShowWelcome(false);
+      setShowCard(true);
+    }, 2000);
+
+    return () => clearTimeout(welcomeTimer);
+  }, []);
 
   const handleNext = () => {
     setCurrentQuestion((prev) => (prev + 1) % questions.length);
   };
 
-  return <Card onNext={handleNext} question={questions[currentQuestion]} />;
+  return (
+    <div 
+      className="w-full min-h-screen relative"
+      style={{
+        background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
+      }}
+    >
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <h1 className="text-4xl font-bold text-white text-center">
+              Selamat Bermain! 💖
+            </h1>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showCard && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="w-full h-full"
+          >
+            <Card onNext={handleNext} question={questions[currentQuestion]} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };
 
 export default Game;

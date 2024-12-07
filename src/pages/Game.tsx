@@ -3,8 +3,6 @@ import { Card } from "@/components/Card";
 import type { Question } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
 
-<lov-add-dependency>framer-motion@latest</lov-add-dependency>
-
 const questions: Question[] = [
   {
     type: "challenge" as const,

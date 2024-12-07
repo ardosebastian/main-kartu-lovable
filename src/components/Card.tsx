@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Timer } from "./Timer";
 import type { Question } from "@/types";
+import 'animate.css';
 
 interface CardProps {
   onNext: () => void;
@@ -54,7 +55,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
     >
       <div
         className={`relative w-full max-w-sm aspect-[3/4] cursor-pointer perspective-1000 ${
-          isShaking ? "animate-shake" : ""
+          isShaking ? "animate__animated animate__shakeY" : ""
         }`}
         onClick={handleCardClick}
       >

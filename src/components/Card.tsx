@@ -13,6 +13,9 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
   const [showTimer, setShowTimer] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(question);
 
+  // Create audio element for flip sound
+  const flipSound = new Audio("/flip-sound.mp3");
+
   useEffect(() => {
     if (!isFlipped) {
       setCurrentQuestion(question);
@@ -20,6 +23,9 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
   }, [question, isFlipped]);
 
   const handleCardClick = () => {
+    // Play flip sound
+    flipSound.play().catch(console.error);
+
     if (!isFlipped) {
       setIsFlipped(true);
       if (question.hasTimer) {

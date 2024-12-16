@@ -18,6 +18,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        'rounded': ['"M PLUS Rounded 1c"', 'sans-serif'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -79,8 +82,8 @@ export default {
         },
       },
       animation: {
-        "flip": "flip 0.6s ease-in-out forwards",
-        "flip-back": "flip-back 0.6s ease-in-out forwards",
+        "flip": "flip 0.3s ease-in-out forwards",
+        "flip-back": "flip-back 0.3s ease-in-out forwards",
         "shake": "shake 0.5s ease-in-out",
       },
     },

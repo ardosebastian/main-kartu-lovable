@@ -14,9 +14,6 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
   const [showTimer, setShowTimer] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(question);
 
-  // Create audio element for flip sound
-  const flipSound = new Audio("/flip-sound.mp3");
-
   useEffect(() => {
     if (!isFlipped) {
       setCurrentQuestion(question);
@@ -24,9 +21,6 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
   }, [question, isFlipped]);
 
   const handleCardClick = () => {
-    // Play flip sound
-    flipSound.play().catch(console.error);
-
     if (!isFlipped) {
       setIsFlipped(true);
       if (question.hasTimer) {
@@ -60,31 +54,33 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
         onClick={handleCardClick}
       >
         <div
-          className={`w-full h-full transition-all duration-1000 transform-style-3d ${
+          className={`w-full h-full transition-all duration-500 transform-style-3d ${
             isFlipped ? "animate-flip" : "animate-flip-back"
           }`}
         >
           {/* Front of card */}
           <div
-            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl p-6"
+            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl p-6 flex items-center justify-center"
             style={{
               background: "linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)",
             }}
           >
-            <div className="flex items-center justify-center h-full">
-              <h2 className="text-2xl font-bold text-gray-800">Tap untuk buka kartu</h2>
-            </div>
+            <img 
+              src="https://ardosebastian.com/wp-content/uploads/2024/12/Logo-Kikuk.svg" 
+              alt="Kartu Kikuk Logo" 
+              className="w-32 h-32 object-contain"
+            />
           </div>
 
           {/* Back of card */}
           <div
             className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-6"
           >
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              <h3 className="text-xl font-bold mb-4">
+            <div className="flex flex-col items-center justify-center h-full text-center font-rounded">
+              <h3 className="text-xl font-bold mb-4 tracking-tight">
                 {currentQuestion.type === "challenge" ? "Tantangan" : "Pertanyaan"}
               </h3>
-              <p className="text-lg mb-6">
+              <p className="text-lg mb-6 font-rounded tracking-tight">
                 {currentQuestion.text}
               </p>
               {showTimer && currentQuestion.hasTimer && currentQuestion.duration && (

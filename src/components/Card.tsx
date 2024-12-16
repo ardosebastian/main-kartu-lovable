@@ -66,7 +66,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
             }}
           >
             <img 
-              src="/assets/logo-kikuk.svg" 
+              src="https://res.cloudinary.com/dwwf2eqhc/image/upload/v1734390558/logo-kikuk_j1c4wu.svg" 
               alt="Kartu Kikuk Logo" 
               className="w-32 h-32 object-contain"
               loading="lazy"

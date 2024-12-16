@@ -1,27 +1,27 @@
-import React, { useState } from "react";
+import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useNavigate } from "react-router-dom";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 const Auth = () => {
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === "123321") {
-      localStorage.setItem("isAuthenticated", "true");
-      navigate("/game");
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Password salah",
-        description: "Silakan coba lagi",
-      });
-    }
-  };
+  useEffect(() => {
+    // Cek status autentikasi saat komponen dimuat
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
+        localStorage.setItem("isAuthenticated", "true");
+        navigate("/game");
+        toast({
+          title: "Login berhasil",
+          description: "Selamat datang kembali!",
+        });
+      }
+    });
+  }, [navigate, toast]);
 
   return (
     <div 
@@ -31,19 +31,36 @@ const Auth = () => {
       }}
     >
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Masukkan Password</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="text-lg py-6"
-          />
-          <Button type="submit" className="w-full py-6 text-lg">
-            Masuk
-          </Button>
-        </form>
+        <h1 className="text-2xl font-bold text-center mb-6">Masuk / Daftar</h1>
+        <SupabaseAuth 
+          supabaseClient={supabase}
+          appearance={{ 
+            theme: ThemeSupa,
+            variables: {
+              default: {
+                colors: {
+                  brand: '#FF719A',
+                  brandAccent: '#FFA99F',
+                }
+              }
+            }
+          }}
+          providers={[]}
+          localization={{
+            variables: {
+              sign_in: {
+                email_label: 'Email anda',
+                password_label: 'Password',
+                button_label: 'Masuk',
+              },
+              sign_up: {
+                email_label: 'Email anda',
+                password_label: 'Password',
+                button_label: 'Daftar',
+              },
+            }
+          }}
+        />
       </div>
     </div>
   );

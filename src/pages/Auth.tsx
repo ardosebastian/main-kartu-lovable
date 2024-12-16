@@ -10,7 +10,6 @@ const Auth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Cek status autentikasi saat komponen dimuat
     supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN") {
         localStorage.setItem("isAuthenticated", "true");
@@ -31,7 +30,7 @@ const Auth = () => {
       }}
     >
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Masuk / Daftar</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">Masuk</h1>
         <SupabaseAuth 
           supabaseClient={supabase}
           appearance={{ 
@@ -46,19 +45,19 @@ const Auth = () => {
             }
           }}
           providers={[]}
+          view="sign_in"
+          showLinks={false}
           localization={{
             variables: {
               sign_in: {
                 email_label: 'Email anda',
                 password_label: 'Password',
                 button_label: 'Masuk',
-              },
-              sign_up: {
-                email_label: 'Email anda',
-                password_label: 'Password',
-                button_label: 'Daftar',
-              },
+              }
             }
+          }}
+          additionalData={{
+            persistSession: true // Ini akan mengaktifkan fitur "Ingat Saya"
           }}
         />
       </div>

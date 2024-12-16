@@ -41,7 +41,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
 
   return (
     <div 
-      className="w-full h-full flex items-center justify-center p-8 md:p-12"
+      className="w-full h-full flex items-start justify-center p-8 md:p-16 pt-16 md:pt-32"
       style={{
         background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
         minHeight: "100vh",

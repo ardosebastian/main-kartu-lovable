@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card } from "@/components/Card";
 import type { Question } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { Header } from "@/components/Header";
 
 const questions: Question[] = [
   {
@@ -69,10 +66,8 @@ const Game = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showWelcome, setShowWelcome] = useState(true);
   const [showCard, setShowCard] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    // Show welcome message for 2 seconds, then fade in the card
     const welcomeTimer = setTimeout(() => {
       setShowWelcome(false);
       setShowCard(true);
@@ -81,31 +76,18 @@ const Game = () => {
     return () => clearTimeout(welcomeTimer);
   }, []);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    localStorage.removeItem("isAuthenticated");
-    navigate("/");
-  };
-
   const handleNext = () => {
     setCurrentQuestion((prev) => (prev + 1) % questions.length);
   };
 
   return (
     <div 
-      className="w-full min-h-screen relative"
+      className="w-full min-h-screen relative pt-16"
       style={{
         background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
       }}
     >
-      <Button
-        variant="ghost"
-        className="absolute top-4 right-4 text-white hover:text-pink-200"
-        onClick={handleLogout}
-      >
-        <LogOut className="mr-2" />
-        Keluar
-      </Button>
+      <Header />
 
       <AnimatePresence>
         {showWelcome && (

@@ -87,13 +87,17 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
               <p className="text-lg mb-6 font-rounded tracking-tight">
                 {currentQuestion.text}
               </p>
-              {showTimer && currentQuestion.hasTimer && currentQuestion.duration && (
-                <Timer duration={currentQuestion.duration} onComplete={() => setShowTimer(false)} />
-              )}
             </div>
           </div>
         </div>
       </div>
+      {currentQuestion.hasTimer && currentQuestion.duration && (
+        <Timer 
+          duration={currentQuestion.duration} 
+          onComplete={() => setShowTimer(false)}
+          isVisible={showTimer}
+        />
+      )}
     </div>
   );
 };

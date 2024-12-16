@@ -13,7 +13,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="w-full px-4 py-2 bg-[#FFB6C1] fixed top-0 left-0 shadow-sm z-50">
+    <header className="w-full px-4 py-4 bg-[#FFB6C1] fixed top-0 left-0 shadow-sm z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <h1 className="text-lg font-bold text-white">Kartu Kikuk-Kikuk</h1>
         <Button 

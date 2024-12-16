@@ -72,7 +72,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
             }}
           >
             <div className="flex items-center justify-center h-full">
-              <h2 className="text-2xl font-bold text-gray-800">Tap untuk Mulai</h2>
+              <h2 className="text-2xl font-bold text-gray-800">Tap untuk buka kartu</h2>
             </div>
           </div>
 

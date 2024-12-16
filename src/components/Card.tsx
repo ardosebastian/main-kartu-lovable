@@ -66,9 +66,13 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
             }}
           >
             <img 
-              src="https://ardosebastian.com/wp-content/uploads/2024/12/Logo-Kikuk.svg" 
+              src="/assets/logo-kikuk.svg" 
               alt="Kartu Kikuk Logo" 
               className="w-32 h-32 object-contain"
+              loading="lazy"
+              decoding="async"
+              width={128}
+              height={128}
             />
           </div>
 

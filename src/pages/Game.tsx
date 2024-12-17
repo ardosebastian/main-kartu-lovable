@@ -139,7 +139,7 @@ const Game = () => {
 
   return (
     <div 
-      className="w-full min-h-screen relative pt-16"
+      className="w-full min-h-screen flex flex-col pb-24"
       style={{
         background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
       }}
@@ -155,7 +155,7 @@ const Game = () => {
             className="absolute inset-0 flex items-center justify-center"
           >
             <h1 className="text-4xl font-bold text-white text-center">
-              Selamat Bermain! 💖
+            💖 Kikuk-kikuk! 💖
             </h1>
           </motion.div>
         )}
@@ -167,13 +167,17 @@ const Game = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="w-full h-full"
+            className="flex-1 flex flex-col pt-4"
           >
-            <Card onNext={handleNext} question={questions[currentQuestion]} />
+            <div className="flex-1 flex items-center justify-center min-h-[500px]">
+              <Card onNext={handleNext} question={questions[currentQuestion]} />
+            </div>
             
-            <div className="fixed bottom-8 left-0 right-0 px-8">
-              <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 max-w-sm mx-auto shadow-lg">
-                <div className="flex items-center justify-between mb-2">
+            <div className="w-full px-7 md:px-8 -mt-12 mt-2 mb-5">
+              <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 max-w-sm mx-auto shadow-lg" style={{
+                background: "linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 120%)"
+              }}>
+                <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-medium">Level {currentLevel}:</span>
                   <span className="text-sm font-medium">{levels[currentLevel - 1].name}</span>
                 </div>

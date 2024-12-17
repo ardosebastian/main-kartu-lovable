@@ -57,14 +57,10 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
 
   return (
     <div 
-      className="w-full h-full flex items-start justify-center p-8 md:p-16 pt-16 md:pt-32"
-      style={{
-        background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
-        minHeight: "100vh",
-      }}
+      className="w-full flex items-center justify-center"
     >
       <div
-        className={`relative w-full max-w-sm aspect-[3/4] cursor-pointer perspective-1000 ${
+        className={`relative w-[85vw] md:w-[400px] max-h-[70vh] aspect-[3/4] cursor-pointer perspective-1000 ${
           isShaking ? "animate__animated animate__shakeY" : ""
         }`}
         onClick={handleCardClick}
@@ -84,7 +80,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
             <img 
               src="https://res.cloudinary.com/dwwf2eqhc/image/upload/v1734390558/logo-kikuk_j1c4wu.svg" 
               alt="Kartu Kikuk Logo" 
-              className="w-32 h-32 object-contain"
+              className="w-24 md:w-32 h-24 md:h-32 object-contain"
               loading="lazy"
               decoding="async"
               width={128}
@@ -94,13 +90,13 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
 
           {/* Back of card */}
           <div
-            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-6 flex flex-col"
+            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-4 md:p-6 flex flex-col"
           >
             <div className="flex-grow flex flex-col items-center justify-center text-center font-rounded">
-              <h3 className="text-xl font-bold mb-4 tracking-tight">
+              <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-4 tracking-tight">
                 {currentQuestion.type === "challenge" ? "Tantangan" : "Pertanyaan"}
               </h3>
-              <p className="text-lg mb-6 font-rounded tracking-tight">
+              <p className="text-base md:text-lg">
                 {currentQuestion.text}
               </p>
             </div>
@@ -109,7 +105,11 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
               <div className={`flex justify-center mb-4 timer-container ${showTimer ? 'animate__animated animate__bounceIn' : ''}`}>
                 <Timer 
                   duration={currentQuestion.duration} 
-                  onComplete={() => setShowTimer(false)}
+                  onComplete={() => {
+                    setIsFlipped(false);
+                    setShowTimer(false);
+                    onNext();
+                  }}
                   isVisible={showTimer}
                   position="bottom"
                 />

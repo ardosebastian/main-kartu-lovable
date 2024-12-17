@@ -6,9 +6,15 @@ interface TimerProps {
   duration: number;
   onComplete: () => void;
   isVisible: boolean;
+  position?: 'bottom' | 'center';
 }
 
-export const Timer: React.FC<TimerProps> = ({ duration, onComplete, isVisible }) => {
+export const Timer: React.FC<TimerProps> = ({ 
+  duration, 
+  onComplete, 
+  isVisible, 
+  position = 'bottom' 
+}) => {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isReady, setIsReady] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
@@ -44,13 +50,13 @@ export const Timer: React.FC<TimerProps> = ({ duration, onComplete, isVisible })
   }, [timeLeft, isRunning, onComplete]);
 
   const handleStart = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Mencegah event bubbling ke card
+    e.stopPropagation(); 
     setIsReady(false);
     setIsRunning(true);
   };
 
   const handleTimerClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Mencegah event bubbling ke card
+    e.stopPropagation(); 
     if (!isReady && !isRunning && !isCompleted) setIsReady(true);
     else if (isReady && !isRunning) handleStart(e);
   };
@@ -60,10 +66,15 @@ export const Timer: React.FC<TimerProps> = ({ duration, onComplete, isVisible })
 
   if (!isVisible) return null;
 
+  const positionClasses = position === 'center' 
+    ? "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10" 
+    : "absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10";
+
   return (
     <div 
       className={cn(
-        "flex items-center justify-center z-10 transition-all duration-500",
+        positionClasses,
+        "transition-all duration-500",
         isCompleted ? "animate__animated animate__fadeOut" : "animate__animated animate__fadeIn"
       )}
       onClick={handleTimerClick}

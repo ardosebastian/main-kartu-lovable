@@ -100,6 +100,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
                   duration={currentQuestion.duration} 
                   onComplete={() => setShowTimer(false)}
                   isVisible={showTimer}
+                  position="bottom"
                 />
               </div>
             )}

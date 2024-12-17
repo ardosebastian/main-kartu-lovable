@@ -35,7 +35,10 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
     if (!isFlipped) {
       setIsFlipped(true);
       if (question.hasTimer) {
-        setShowTimer(true);
+        // Add a delay to show timer after card is fully flipped
+        setTimeout(() => {
+          setShowTimer(true);
+        }, 500); // 500ms delay to ensure card flip animation completes
       }
     } else {
       setIsFlipped(false);
@@ -103,7 +106,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
             </div>
             
             {currentQuestion.hasTimer && currentQuestion.duration && (
-              <div className="flex justify-center mb-4 timer-container">
+              <div className={`flex justify-center mb-4 timer-container ${showTimer ? 'animate__animated animate__bounceIn' : ''}`}>
                 <Timer 
                   duration={currentQuestion.duration} 
                   onComplete={() => setShowTimer(false)}

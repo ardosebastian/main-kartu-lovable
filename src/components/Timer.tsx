@@ -68,7 +68,7 @@ export const Timer: React.FC<TimerProps> = ({
 
   const positionClasses = position === 'center' 
     ? "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10" 
-    : "absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10";
+    : "absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10";
 
   return (
     <div 

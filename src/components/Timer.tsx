@@ -19,7 +19,6 @@ export const Timer: React.FC<TimerProps> = ({
   const [isReady, setIsReady] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [showTimer, setShowTimer] = useState(false);
 
   useEffect(() => {
     if (!isVisible) {
@@ -27,16 +26,8 @@ export const Timer: React.FC<TimerProps> = ({
       setIsRunning(false);
       setIsCompleted(false);
       setTimeLeft(duration);
-      setShowTimer(false);
       return;
     }
-
-    // Add delay before showing timer
-    const timer = setTimeout(() => {
-      setShowTimer(true);
-    }, 500);
-
-    return () => clearTimeout(timer);
   }, [isVisible, duration]);
 
   useEffect(() => {
@@ -58,24 +49,33 @@ export const Timer: React.FC<TimerProps> = ({
     return () => clearInterval(timer);
   }, [timeLeft, isRunning, onComplete]);
 
+  const handleStart = (e: React.MouseEvent) => {
+    e.stopPropagation(); 
+    setIsReady(false);
+    setIsRunning(true);
+  };
+
   const handleTimerClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isRunning && !isCompleted) {
-      setIsReady(false);
-      setIsRunning(true);
-    }
+    e.stopPropagation(); 
+    if (!isReady && !isRunning && !isCompleted) setIsReady(true);
+    else if (isReady && !isRunning) handleStart(e);
   };
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
-  if (!isVisible || !showTimer) return null;
+  if (!isVisible) return null;
+
+  const positionClasses = position === 'center' 
+    ? "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10" 
+    : "absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10";
 
   return (
     <div 
       className={cn(
-        "flex items-center justify-center z-10 transition-all duration-500",
-        isCompleted ? "animate__animated animate__fadeOut" : "animate__animated animate__fadeIn animate__bounceIn"
+        positionClasses,
+        "transition-all duration-500",
+        isCompleted ? "animate__animated animate__fadeOut" : "animate__animated animate__fadeIn"
       )}
       onClick={handleTimerClick}
     >
@@ -83,13 +83,21 @@ export const Timer: React.FC<TimerProps> = ({
         className={cn(
           "bg-white/80 backdrop-blur-sm rounded-full w-24 h-24 flex flex-col items-center justify-center shadow-lg border-2 border-pink-200 cursor-pointer font-rounded",
           "animate__animated",
+          isReady ? "animate__bounceIn" : "",
           isRunning ? "animate__pulse animate__infinite" : "",
           isCompleted ? "animate__bounceOut" : ""
         )}
       >
-        {!isRunning && !isCompleted && (
+        {!isReady && !isRunning && !isCompleted && (
           <div 
             className="text-base font-bold text-pink-600 animate__animated animate__pulse animate__infinite"
+          >
+            Mulai?
+          </div>
+        )}
+        {isReady && !isRunning && (
+          <div 
+            className="text-base font-bold text-pink-600 animate__animated animate__bounceIn"
           >
             Siap?
           </div>

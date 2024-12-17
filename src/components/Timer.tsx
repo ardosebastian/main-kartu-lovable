@@ -43,9 +43,16 @@ export const Timer: React.FC<TimerProps> = ({ duration, onComplete, isVisible })
     return () => clearInterval(timer);
   }, [timeLeft, isRunning, onComplete]);
 
-  const handleStart = () => {
+  const handleStart = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Mencegah event bubbling ke card
     setIsReady(false);
     setIsRunning(true);
+  };
+
+  const handleTimerClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Mencegah event bubbling ke card
+    if (!isReady && !isRunning && !isCompleted) setIsReady(true);
+    else if (isReady && !isRunning) handleStart(e);
   };
 
   const minutes = Math.floor(timeLeft / 60);
@@ -56,9 +63,10 @@ export const Timer: React.FC<TimerProps> = ({ duration, onComplete, isVisible })
   return (
     <div 
       className={cn(
-        "absolute inset-0 flex items-center justify-center z-10 transition-all duration-500",
+        "flex items-center justify-center z-10 transition-all duration-500",
         isCompleted ? "animate__animated animate__fadeOut" : "animate__animated animate__fadeIn"
       )}
+      onClick={handleTimerClick}
     >
       <div 
         className={cn(
@@ -68,10 +76,6 @@ export const Timer: React.FC<TimerProps> = ({ duration, onComplete, isVisible })
           isRunning ? "animate__pulse animate__infinite" : "",
           isCompleted ? "animate__bounceOut" : ""
         )}
-        onClick={() => {
-          if (!isReady && !isRunning && !isCompleted) setIsReady(true);
-          else if (isReady && !isRunning) handleStart();
-        }}
       >
         {!isReady && !isRunning && !isCompleted && (
           <div 

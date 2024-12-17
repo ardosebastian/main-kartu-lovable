@@ -20,7 +20,12 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
     }
   }, [question, isFlipped]);
 
-  const handleCardClick = () => {
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Jika klik berasal dari timer, abaikan flip
+    if ((e.target as HTMLElement).closest('.timer-container')) {
+      return;
+    }
+
     if (!isFlipped) {
       setIsFlipped(true);
       if (question.hasTimer) {
@@ -78,16 +83,9 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
 
           {/* Back of card */}
           <div
-            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-6"
+            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-6 flex flex-col"
           >
-            {currentQuestion.hasTimer && currentQuestion.duration && (
-              <Timer 
-                duration={currentQuestion.duration} 
-                onComplete={() => setShowTimer(false)}
-                isVisible={showTimer}
-              />
-            )}
-            <div className="flex flex-col items-center justify-center h-full text-center font-rounded">
+            <div className="flex-grow flex flex-col items-center justify-center text-center font-rounded">
               <h3 className="text-xl font-bold mb-4 tracking-tight">
                 {currentQuestion.type === "challenge" ? "Tantangan" : "Pertanyaan"}
               </h3>
@@ -95,6 +93,16 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
                 {currentQuestion.text}
               </p>
             </div>
+            
+            {currentQuestion.hasTimer && currentQuestion.duration && (
+              <div className="flex justify-center mb-4 timer-container">
+                <Timer 
+                  duration={currentQuestion.duration} 
+                  onComplete={() => setShowTimer(false)}
+                  isVisible={showTimer}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -54,7 +54,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
         onClick={handleCardClick}
       >
         <div
-          className={`w-full h-full transition-all duration-500 transform-style-3d ${
+          className={`relative w-full h-full transition-all duration-500 transform-style-3d ${
             isFlipped ? "animate-flip" : "animate-flip-back"
           }`}
         >
@@ -80,6 +80,13 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
           <div
             className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-6"
           >
+            {currentQuestion.hasTimer && currentQuestion.duration && (
+              <Timer 
+                duration={currentQuestion.duration} 
+                onComplete={() => setShowTimer(false)}
+                isVisible={showTimer}
+              />
+            )}
             <div className="flex flex-col items-center justify-center h-full text-center font-rounded">
               <h3 className="text-xl font-bold mb-4 tracking-tight">
                 {currentQuestion.type === "challenge" ? "Tantangan" : "Pertanyaan"}
@@ -91,13 +98,6 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
           </div>
         </div>
       </div>
-      {currentQuestion.hasTimer && currentQuestion.duration && (
-        <Timer 
-          duration={currentQuestion.duration} 
-          onComplete={() => setShowTimer(false)}
-          isVisible={showTimer}
-        />
-      )}
     </div>
   );
 };

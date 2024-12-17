@@ -34,7 +34,7 @@ export const Timer: React.FC<TimerProps> = ({ duration, onComplete, isVisible })
           setIsRunning(false);
           setTimeout(() => {
             onComplete();
-          }, 1000); // Delay to show completion state
+          }, 1000);
         }
         return prev - 1;
       });
@@ -56,13 +56,13 @@ export const Timer: React.FC<TimerProps> = ({ duration, onComplete, isVisible })
   return (
     <div 
       className={cn(
-        "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10 transition-all duration-500",
+        "absolute inset-0 flex items-center justify-center z-10 transition-all duration-500",
         isCompleted ? "animate__animated animate__fadeOut" : "animate__animated animate__fadeIn"
       )}
     >
       <div 
         className={cn(
-          "bg-white rounded-full w-32 h-32 flex flex-col items-center justify-center shadow-lg border-2 border-pink-200 cursor-pointer font-['M_PLUS_Rounded_1c']",
+          "bg-white/80 backdrop-blur-sm rounded-full w-24 h-24 flex flex-col items-center justify-center shadow-lg border-2 border-pink-200 cursor-pointer font-rounded",
           "animate__animated",
           isReady ? "animate__bounceIn" : "",
           isRunning ? "animate__pulse animate__infinite" : "",

@@ -13,6 +13,7 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
   const [isShaking, setIsShaking] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(question);
+  const [isClickable, setIsClickable] = useState(true);
 
   useEffect(() => {
     if (!isFlipped) {
@@ -21,6 +22,11 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
   }, [question, isFlipped]);
 
   const handleCardClick = (e: React.MouseEvent) => {
+    // Jika kartu sedang dalam animasi shake atau tidak bisa diklik, abaikan klik
+    if (!isClickable || isShaking) {
+      return;
+    }
+
     // Jika klik berasal dari timer, abaikan flip
     if ((e.target as HTMLElement).closest('.timer-container')) {
       return;
@@ -34,10 +40,12 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
     } else {
       setIsFlipped(false);
       setShowTimer(false);
+      setIsClickable(false); // Nonaktifkan klik saat mulai shake
       setTimeout(() => {
         setIsShaking(true);
         setTimeout(() => {
           setIsShaking(false);
+          setIsClickable(true); // Aktifkan kembali klik setelah shake selesai
           onNext();
         }, 800);
       }, 1000);

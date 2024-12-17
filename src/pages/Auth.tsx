@@ -10,9 +10,18 @@ const Auth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN") {
-        localStorage.setItem("isAuthenticated", "true");
+    // Check if user is already authenticated
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate("/game");
+      }
+    };
+    
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
         navigate("/game");
         toast({
           title: "Login berhasil",
@@ -20,6 +29,8 @@ const Auth = () => {
         });
       }
     });
+
+    return () => subscription.unsubscribe();
   }, [navigate, toast]);
 
   return (
@@ -57,7 +68,7 @@ const Auth = () => {
             }
           }}
           additionalData={{
-            persistSession: true // Ini akan mengaktifkan fitur "Ingat Saya"
+            persistSession: true
           }}
         />
       </div>

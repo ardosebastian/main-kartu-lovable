@@ -60,7 +60,7 @@ const Card: React.FC<CardProps> = ({ onNext, question }) => {
       className="w-full flex items-center justify-center"
     >
       <div
-        className={`relative w-[85vw] md:w-[400px] max-h-[70vh] aspect-[3/4] cursor-pointer perspective-1000 ${
+        className={`relative w-[85vw] md:w-[400px] aspect-[3/4] cursor-pointer perspective-1000 ${
           isShaking ? "animate__animated animate__shakeY" : ""
         }`}
         onClick={handleCardClick}
@@ -72,7 +72,7 @@ const Card: React.FC<CardProps> = ({ onNext, question }) => {
         >
           {/* Front of card */}
           <div
-            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl p-6 flex items-center justify-center"
+            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl p-4 md:p-6 flex items-center justify-center"
             style={{
               background: "linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)",
             }}
@@ -90,13 +90,13 @@ const Card: React.FC<CardProps> = ({ onNext, question }) => {
 
           {/* Back of card */}
           <div
-            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-4 md:p-6 flex flex-col"
+            className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-3 md:p-6 flex flex-col"
           >
             <div className="flex-grow flex flex-col items-center justify-center text-center font-rounded">
-              <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-4 tracking-tight">
+              <h3 className="text-base md:text-xl font-bold mb-2 md:mb-4 tracking-tight">
                 {currentQuestion.type === "challenge" ? "Tantangan" : "Pertanyaan"}
               </h3>
-              <p className="text-base md:text-lg">
+              <p className="text-sm md:text-lg">
                 {currentQuestion.text}
               </p>
             </div>

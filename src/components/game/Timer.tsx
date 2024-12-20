@@ -68,7 +68,7 @@ const Timer: React.FC<TimerProps> = ({
 
   const positionClasses = position === 'center' 
     ? "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10" 
-    : "absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10";
+    : "absolute bottom-12 left-1/2 transform -translate-x-1/2 z-10";
 
   return (
     <div 
@@ -81,7 +81,7 @@ const Timer: React.FC<TimerProps> = ({
     >
       <div 
         className={cn(
-          "bg-white/80 backdrop-blur-sm rounded-full w-24 h-24 flex flex-col items-center justify-center shadow-lg border-2 border-pink-200 cursor-pointer font-rounded",
+          "bg-white/95 backdrop-blur-sm rounded-full w-24 h-24 flex flex-col items-center justify-center shadow-lg border-2 border-pink-300 cursor-pointer font-rounded hover:shadow-pink-100/50",
           "animate__animated",
           isReady ? "animate__bounceIn" : "",
           isRunning ? "animate__pulse animate__infinite" : "",

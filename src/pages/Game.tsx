@@ -4,7 +4,7 @@ import type { Question, LevelInfo } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { Header } from "@/components/common/Header";
 import { toast } from "sonner";
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "@/components/common/progress";
 import { questions } from "@/lib/data/questions";
 import { levels } from "@/lib/data/levels";
 import { BottomNavigation } from "@/components/common/BottomNavigation";

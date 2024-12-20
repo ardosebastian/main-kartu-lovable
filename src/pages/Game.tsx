@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
 import { questions } from "@/lib/data/questions";
 import { levels } from "@/lib/data/levels";
+import { BottomNavigation } from "@/components/common/BottomNavigation";
 
 const Game = () => {
   console.log('Game component rendered');
@@ -65,7 +66,7 @@ const Game = () => {
 
   return (
     <div 
-      className="w-full min-h-screen flex flex-col pb-24"
+      className="w-full min-h-screen flex flex-col pb-32"
       style={{
         background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
       }}
@@ -113,6 +114,8 @@ const Game = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <BottomNavigation />
     </div>
   );
 };

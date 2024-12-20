@@ -24,6 +24,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
+        console.log('Session:', session);
         setIsAuthenticated(!!session);
       } catch (error) {
         console.error("Error checking auth status:", error);
@@ -34,43 +35,44 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('Auth state changed:', session);
       setIsAuthenticated(!!session);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
+  console.log('isAuthenticated:', isAuthenticated);
+
   if (isAuthenticated === null) {
-    return null; // Loading state
+    return <div>Loading...</div>; 
   }
 
   return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
 };
 
-const App = () => {
+function App() {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Auth />} />
-              <Route
-                path="/game"
-                element={
-                  <ProtectedRoute>
-                    <Game />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Auth />} />
+            <Route 
+              path="/game" 
+              element={
+                <ProtectedRoute>
+                  <Game />
+                </ProtectedRoute>
+              } 
+            />
+          </Routes>
+        </BrowserRouter>
+        <Toaster />
+        <Sonner />
+      </TooltipProvider>
+    </QueryClientProvider>
   );
-};
+}
 
 export default App;

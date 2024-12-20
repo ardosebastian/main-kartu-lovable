@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Timer } from "./Timer";
+import Timer from "@/components/game/Timer";
 import type { Question } from "@/types";
 import 'animate.css';
 
@@ -8,7 +8,7 @@ interface CardProps {
   question: Question;
 }
 
-export const Card: React.FC<CardProps> = ({ onNext, question }) => {
+const Card: React.FC<CardProps> = ({ onNext, question }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
@@ -100,20 +100,16 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
                 {currentQuestion.text}
               </p>
             </div>
-            
-            {currentQuestion.hasTimer && currentQuestion.duration && (
-              <div className={`flex justify-center mb-4 timer-container ${showTimer ? 'animate__animated animate__bounceIn' : ''}`}>
-                <Timer 
-                  duration={currentQuestion.duration} 
-                  onComplete={() => {
-                    setIsFlipped(false);
-                    setShowTimer(false);
-                    onNext();
-                  }}
-                  isVisible={showTimer}
-                  position="bottom"
-                />
-              </div>
+
+            {showTimer && question.hasTimer && question.duration && (
+              <Timer 
+                duration={question.duration} 
+                onComplete={() => {
+                  setShowTimer(false);
+                  handleCardClick({} as React.MouseEvent);
+                }} 
+                isVisible={showTimer}
+              />
             )}
           </div>
         </div>
@@ -121,3 +117,5 @@ export const Card: React.FC<CardProps> = ({ onNext, question }) => {
     </div>
   );
 };
+
+export default Card;

@@ -1,98 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Card } from "@/components/Card";
+import Card from "@/components/game/Card"; 
 import type { Question, LevelInfo } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/common/Header";
 import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
-
-const levels: LevelInfo[] = [
-  {
-    id: 1,
-    name: "Bisikan Menggoda",
-    description: "Deep talk seputar seks"
-  },
-  {
-    id: 2,
-    name: "Sentuhan Nakal",
-    description: "Tantangan melibatkan sentuhan"
-  },
-  {
-    id: 3,
-    name: "Puncak Gairah",
-    description: "Tantangan hubungan intim"
-  }
-];
-
-const questions: Question[] = [
-  {
-    type: "question",
-    text: "Ceritakan fantasi terliar anda",
-    hasTimer: false,
-    level: 1
-  },
-  {
-    type: "challenge",
-    text: "Berikan 3 ciuman di tempat yang berbeda",
-    hasTimer: false,
-    level: 2
-  },
-  {
-    type: "challenge",
-    text: "Lakukan tarian seksi selama 1 menit",
-    hasTimer: true,
-    duration: 60,
-    level: 2
-  },
-  {
-    type: "challenge",
-    text: "Berikan pasangan anda pijatan selama 2 menit",
-    hasTimer: true,
-    duration: 120,
-    level: 1
-  },
-  {
-    type: "question",
-    text: "Bagian mana dari tubuh pasangan yang paling anda sukai?",
-    hasTimer: false,
-    level: 1
-  },
-  {
-    type: "challenge",
-    text: "Buat pasangan anda tertawa tanpa menggelitik selama 30 detik",
-    hasTimer: true,
-    duration: 30,
-    level: 1
-  },
-  {
-    type: "question",
-    text: "Ceritakan pengalaman romantis yang tidak akan pernah anda lupakan",
-    hasTimer: false,
-    level: 1
-  },
-  {
-    type: "challenge",
-    text: "Bisikkan kata-kata nakal di telinga pasangan selama 1 menit",
-    hasTimer: true,
-    duration: 60,
-    level: 2
-  },
-  {
-    type: "question",
-    text: "Apa yang membuat anda terangsang?",
-    hasTimer: false,
-    level: 1
-  },
-  {
-    type: "challenge",
-    text: "Berpelukan erat selama 30 detik tanpa berbicara",
-    hasTimer: true,
-    duration: 30,
-    level: 2
-  }
-];
+import { questions } from "@/lib/data/questions";
+import { levels } from "@/lib/data/levels";
 
 const Game = () => {
+  console.log('Game component rendered');
+  console.log('Questions:', questions);
+  console.log('Levels:', levels);
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showWelcome, setShowWelcome] = useState(true);
   const [showCard, setShowCard] = useState(false);
@@ -100,7 +20,9 @@ const Game = () => {
   const [questionsCompleted, setQuestionsCompleted] = useState(0);
 
   useEffect(() => {
+    console.log('Game useEffect triggered');
     const welcomeTimer = setTimeout(() => {
+      console.log('Welcome timer completed');
       setShowWelcome(false);
       setShowCard(true);
     }, 2000);
@@ -109,9 +31,13 @@ const Game = () => {
   }, []);
 
   const handleNext = () => {
+    console.log('handleNext called');
     const nextQuestionIndex = (currentQuestion + 1) % questions.length;
     const questionsInCurrentLevel = questions.filter(q => q.level === currentLevel);
     const completedInLevel = questionsCompleted + 1;
+    
+    console.log('Next question index:', nextQuestionIndex);
+    console.log('Questions in current level:', questionsInCurrentLevel);
     
     // Check if we should level up
     if (completedInLevel >= questionsInCurrentLevel.length && currentLevel < 3) {

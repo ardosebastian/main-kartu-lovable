@@ -5,14 +5,14 @@ import 'animate.css';
 interface TimerProps {
   duration: number;
   onComplete: () => void;
-  isVisible: boolean;
+  isVisible?: boolean;
   position?: 'bottom' | 'center';
 }
 
-export const Timer: React.FC<TimerProps> = ({ 
+const Timer: React.FC<TimerProps> = ({ 
   duration, 
   onComplete, 
-  isVisible, 
+  isVisible = true, 
   position = 'bottom' 
 }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
@@ -103,11 +103,20 @@ export const Timer: React.FC<TimerProps> = ({
           </div>
         )}
         {isRunning && (
-          <div className="text-xl font-bold text-pink-600">
-            {minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}
+          <div className="text-2xl font-bold text-pink-600">
+            {`${minutes}:${seconds < 10 ? '0' : ''}${seconds}`}
+          </div>
+        )}
+        {isCompleted && (
+          <div 
+            className="text-base font-bold text-pink-600 animate__animated animate__bounceIn"
+          >
+            Selesai!
           </div>
         )}
       </div>
     </div>
   );
 };
+
+export default Timer;

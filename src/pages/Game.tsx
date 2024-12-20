@@ -100,7 +100,7 @@ const Game = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="flex flex-col items-center gap-6 px-4 -mt-4"
+            className="flex flex-col items-center gap-6 px-4 -mt-4 md:-mt-8"
           >
             <Card onNext={handleNext} question={questions[currentQuestion]} />
             

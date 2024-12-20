@@ -39,8 +39,7 @@ const BottomNavigation: React.FC = () => {
           >
             <item.icon 
               className={cn(
-                "w-6 h-6 mb-1",
-                activeMenu === item.value ? "animate-bounce" : ""
+                "w-6 h-6 mb-1"
               )}
             />
             <span className="text-xs font-medium">{item.label}</span>

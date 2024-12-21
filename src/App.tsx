@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Auth from "./pages/Auth";
 import Game from "./pages/Game";
 import Profile from "./pages/Profile";
+import MainCepat from "./pages/Game/MainCepat";
 import { BottomNavigation } from "./components/common/BottomNavigation";
 import { Header } from "./components/common/Header";
 
@@ -68,6 +69,7 @@ function App() {
                         <Routes>
                           <Route path="/game" element={<Game />} />
                           <Route path="/profile" element={<Profile />} />
+                          <Route path="/main-cepat" element={<MainCepat />} />
                           <Route path="/" element={<Navigate to="/game" replace />} />
                         </Routes>
                       </main>

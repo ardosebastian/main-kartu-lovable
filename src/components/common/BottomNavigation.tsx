@@ -1,26 +1,14 @@
 import React, { useState } from 'react';
-import { GamepadIcon, BookOpenIcon, UserIcon, TimerIcon, TrophyIcon } from 'lucide-react';
+import { BookOpenIcon, UserIcon, TimerIcon, TrophyIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNavigation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeMenu, setActiveMenu] = useState<'game' | 'tutorial' | 'profile' | 'main-cepat' | 'main-bertahap'>('game');
+  const [activeMenu, setActiveMenu] = useState<'tutorial' | 'profile' | 'main-cepat' | 'main-bertahap'>('main-cepat');
 
   const menuItems = [
-    {
-      icon: GamepadIcon,
-      label: 'Game',
-      value: 'game',
-      href: '/game'
-    },
-    {
-      icon: BookOpenIcon,
-      label: 'Tutorial',
-      value: 'tutorial',
-      href: '/tutorial'
-    },
     {
       icon: TimerIcon,
       label: 'Main Cepat',
@@ -40,6 +28,12 @@ const BottomNavigation: React.FC = () => {
       }
     },
     {
+      icon: BookOpenIcon,
+      label: 'Tutorial',
+      value: 'tutorial',
+      href: '/tutorial'
+    },
+    {
       icon: UserIcon,
       label: 'Profile',
       value: 'profile',
@@ -48,7 +42,7 @@ const BottomNavigation: React.FC = () => {
   ];
 
   const handleMenuClick = (item: typeof menuItems[number]) => {
-    setActiveMenu(item.value as "game" | "tutorial" | "profile" | "main-cepat" | "main-bertahap");
+    setActiveMenu(item.value as "tutorial" | "profile" | "main-cepat" | "main-bertahap");
     navigate(item.href);
     if (item.onClick) {
       item.onClick();

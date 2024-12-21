@@ -23,6 +23,7 @@ const MainCepat = () => {
     console.log('MainCepat useEffect triggered');
     const welcomeTimer = setTimeout(() => {
       console.log('Welcome timer completed');
+      console.log('Setting showWelcome to false');
       setShowWelcome(false);
     }, 100);
 
@@ -64,14 +65,6 @@ const MainCepat = () => {
         background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
       }}
     >
-      <div className="fixed top-0 left-0 right-0 z-50">
-        <Header />
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        <BottomNavigation />
-      </div>
-
       <AnimatePresence>
         {showWelcome && (
           <motion.div 

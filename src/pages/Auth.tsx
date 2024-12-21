@@ -14,7 +14,7 @@ const Auth = () => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate("/game");
+        navigate("/main-cepat");
       }
     };
     
@@ -22,7 +22,7 @@ const Auth = () => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" && session) {
-        navigate("/game");
+        navigate("/main-cepat");
         toast({
           title: "Login berhasil",
           description: "Selamat datang kembali!",

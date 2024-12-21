@@ -27,7 +27,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        console.log('Session:', session);
         setIsAuthenticated(!!session);
       } catch (error) {
         console.error("Error checking auth status:", error);
@@ -38,20 +37,17 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log('Auth state changed:', session);
       setIsAuthenticated(!!session);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  console.log('isAuthenticated:', isAuthenticated);
-
   if (isAuthenticated === null) {
     return <div>Loading...</div>; 
   }
 
-  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/auth" replace />;
 };
 
 function App() {
@@ -60,20 +56,27 @@ function App() {
       <TooltipProvider>
         <BrowserRouter>
           <div className="flex flex-col min-h-screen overflow-hidden">
-            <Header />
-            <main className="flex-grow overflow-y-auto pb-20">
-              <Routes>
-                <Route path="/game" element={
+            <Routes>
+              <Route path="/auth" element={<Auth />} />
+              <Route
+                path="/*"
+                element={
                   <ProtectedRoute>
-                    <Game />
+                    <>
+                      <Header />
+                      <main className="flex-grow overflow-y-auto pb-20">
+                        <Routes>
+                          <Route path="/game" element={<Game />} />
+                          <Route path="/profile" element={<Profile />} />
+                          <Route path="/" element={<Navigate to="/game" replace />} />
+                        </Routes>
+                      </main>
+                      <BottomNavigation />
+                    </>
                   </ProtectedRoute>
-                } />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/" element={<Game />} />
-              </Routes>
-            </main>
-            <BottomNavigation />
+                }
+              />
+            </Routes>
           </div>
         </BrowserRouter>
         <Toaster />

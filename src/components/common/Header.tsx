@@ -2,14 +2,23 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    localStorage.removeItem("isAuthenticated");
-    navigate("/");
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      localStorage.removeItem("isAuthenticated");
+      navigate("/");
+      toast.success("Berhasil keluar");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast.error("Gagal keluar dari aplikasi");
+    }
   };
 
   return (

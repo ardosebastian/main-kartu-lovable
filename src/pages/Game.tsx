@@ -16,7 +16,6 @@ const Game = () => {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showWelcome, setShowWelcome] = useState(true);
-  const [showCard, setShowCard] = useState(false);
   const [currentLevel, setCurrentLevel] = useState<1 | 2 | 3>(1);
   const [questionsCompleted, setQuestionsCompleted] = useState(0);
 
@@ -25,8 +24,7 @@ const Game = () => {
     const welcomeTimer = setTimeout(() => {
       console.log('Welcome timer completed');
       setShowWelcome(false);
-      setShowCard(true);
-    }, 2000);
+    }, 100);
 
     return () => clearTimeout(welcomeTimer);
   }, []);
@@ -87,19 +85,16 @@ const Game = () => {
             exit={{ opacity: 0, y: -20 }}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <h1 className="text-4xl font-bold text-white text-center">
-              💖 Kikuk-kikuk! 💖
-            </h1>
           </motion.div>
         )}
       </AnimatePresence>
 
       <AnimatePresence>
-        {showCard && (
+        {!showWelcome && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="flex flex-col items-center gap-6 px-4 -mt-4 md:-mt-8"
           >
             <Card onNext={handleNext} question={questions[currentQuestion]} />

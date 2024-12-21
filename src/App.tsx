@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Auth from "./pages/Auth";
 import Game from "./pages/Game";
+import Profile from "./pages/Profile";
+import { BottomNavigation } from "./components/common/BottomNavigation";
+import { Header } from "./components/common/Header";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -56,17 +59,22 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Auth />} />
-            <Route 
-              path="/game" 
-              element={
-                <ProtectedRoute>
-                  <Game />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
+          <div className="flex flex-col min-h-screen overflow-hidden">
+            <Header />
+            <main className="flex-grow overflow-y-auto pb-20">
+              <Routes>
+                <Route path="/game" element={
+                  <ProtectedRoute>
+                    <Game />
+                  </ProtectedRoute>
+                } />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/" element={<Game />} />
+              </Routes>
+            </main>
+            <BottomNavigation />
+          </div>
         </BrowserRouter>
         <Toaster />
         <Sonner />

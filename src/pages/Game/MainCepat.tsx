@@ -8,6 +8,8 @@ import { Progress } from "@/components/common/progress";
 import { questions } from "@/lib/data/questions";
 import { levels } from "@/lib/data/levels";
 import { BottomNavigation } from "@/components/common/BottomNavigation";
+import { supabase } from '@/integrations/supabase/client';
+import { FirstLoginModal } from '@/components/common/FirstLoginModal';
 
 const MainCepat = () => {
   console.log('MainCepat component rendered');
@@ -18,6 +20,7 @@ const MainCepat = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [currentLevel, setCurrentLevel] = useState<1 | 2 | 3>(1);
   const [questionsCompleted, setQuestionsCompleted] = useState(0);
+  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] = useState(false);
 
   useEffect(() => {
     console.log('MainCepat useEffect triggered');
@@ -28,6 +31,32 @@ const MainCepat = () => {
     }, 100);
 
     return () => clearTimeout(welcomeTimer);
+  }, []);
+
+  useEffect(() => {
+    const checkFirstLogin = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('is_first_login')
+            .eq('id', user.id)
+            .single();
+
+          if (error) throw error;
+
+          if (data?.is_first_login) {
+            setIsFirstLoginModalOpen(true);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking first login:', error);
+      }
+    };
+
+    checkFirstLogin();
   }, []);
 
   const handleNext = () => {
@@ -59,36 +88,42 @@ const MainCepat = () => {
   };
 
   return (
-    <div 
-      className="w-full min-h-[100dvh] flex items-center justify-center"
-      style={{
-        background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
-      }}
-    >
-      <AnimatePresence>
-        {showWelcome && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute inset-0 flex items-center justify-center"
-          >
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div>
+      <FirstLoginModal 
+        isOpen={isFirstLoginModalOpen} 
+        onClose={() => setIsFirstLoginModalOpen(false)} 
+      />
+      <div 
+        className="w-full min-h-[100dvh] flex items-center justify-center"
+        style={{
+          background: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)",
+        }}
+      >
+        <AnimatePresence>
+          {showWelcome && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {!showWelcome && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col items-center gap-6 px-4 -mt-4 md:-mt-8"
-          >
-            <Card onNext={handleNext} question={questions[currentQuestion]} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {!showWelcome && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center gap-6 px-4 -mt-4 md:-mt-8"
+            >
+              <Card onNext={handleNext} question={questions[currentQuestion]} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };

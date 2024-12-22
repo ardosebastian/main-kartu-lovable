@@ -20,13 +20,42 @@ const Auth = () => {
     
     checkSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" && session) {
-        navigate("/main-cepat");
-        toast({
-          title: "Login berhasil",
-          description: "Selamat datang kembali!",
-        });
+        try {
+          console.log('Session user:', session.user);
+          
+          // Sinkronisasi username dengan email
+          const { data: existingProfile } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('id', session.user.id)
+            .maybeSingle();
+
+          console.log('Existing profile:', existingProfile);
+
+          if (!existingProfile || existingProfile.username !== session.user.email) {
+            const { error: updateError } = await supabase
+              .from('profiles')
+              .update({ username: session.user.email })
+              .eq('id', session.user.id);
+
+            console.log('Update error:', updateError);
+          }
+
+          navigate("/main-cepat");
+          toast({
+            title: "Login berhasil",
+            description: "Selamat datang kembali!",
+          });
+        } catch (error) {
+          console.error("Error sinkronisasi username:", error);
+          toast({
+            title: "Gagal sinkronisasi",
+            description: "Terjadi masalah saat sinkronisasi profil",
+            variant: "destructive"
+          });
+        }
       }
     });
 

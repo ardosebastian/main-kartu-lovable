@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   UserIcon, 
@@ -23,6 +23,8 @@ import {
   DialogTitle, 
   DialogTrigger 
 } from '@/components/ui/dialog';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const ProfileCard: React.FC<{ 
   title: string, 
@@ -48,11 +50,73 @@ const ProfileCard: React.FC<{
 const Profile: React.FC = () => {
   const [husbandNickname, setHusbandNickname] = useState('');
   const [wifeNickname, setWifeNickname] = useState('');
+  const [username, setUsername] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('husband_nickname, wife_nickname, username')
+            .eq('id', user.id)
+            .single();
+
+          if (error) throw error;
+
+          setHusbandNickname(data?.husband_nickname || '');
+          setWifeNickname(data?.wife_nickname || '');
+          setUsername(data?.username || '');
+        }
+      } catch (error) {
+        toast.error('Gagal mengambil data profil');
+        console.error('Error fetching profile:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
+
+  const handleSaveProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        // Cek apakah nickname kosong
+        const isNicknameEmpty = !husbandNickname.trim() || !wifeNickname.trim();
+
+        const { error } = await supabase
+          .from('profiles')
+          .update({ 
+            husband_nickname: husbandNickname.trim() || null, 
+            wife_nickname: wifeNickname.trim() || null,
+            is_first_login: isNicknameEmpty
+          })
+          .eq('id', user.id);
+
+        if (error) throw error;
+
+        if (isNicknameEmpty) {
+          toast.warning('Nickname pasangan kosong. Silakan lengkapi di halaman selanjutnya.');
+        } else {
+          toast.success('Profil berhasil diperbarui');
+        }
+      }
+    } catch (error) {
+      toast.error('Gagal memperbarui profil');
+      console.error('Error updating profile:', error);
+    }
+  };
 
   const handleResetGame = () => {
     console.log('Reset Game');
@@ -67,6 +131,10 @@ const Profile: React.FC = () => {
     console.log('Ganti Password');
   };
 
+  if (isLoading) {
+    return <div>Memuat data...</div>;
+  }
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -75,7 +143,20 @@ const Profile: React.FC = () => {
       className="flex-1 bg-gradient-to-br from-pink-50 to-white px-6 pt-20 pb-24 overflow-y-auto h-[calc(100vh-4rem)]"
     >
       <div className="max-w-md mx-auto space-y-6">
-        <ProfileCard title="Profil Pasangan" icon={UserIcon}>
+        <div className="bg-white/60 backdrop-blur-lg border border-pink-100/50 rounded-2xl shadow-xl mb-6 overflow-hidden">
+          <div className="bg-gradient-to-r from-pink-50 to-pink-100 p-4 flex items-center">
+            <UserIcon className="w-6 h-6 mr-3 text-pink-600" />
+            <h2 className="text-lg font-semibold text-pink-800">Akun Saya</h2>
+          </div>
+          <div className="p-4">
+            <div className="text-left">
+              <p className="text-xs text-pink-600">Username</p>
+              <h3 className="text-sm font-bold text-pink-800">{username}</h3>
+            </div>
+          </div>
+        </div>
+
+        <ProfileCard title="Nickname Pasangan" icon={UserIcon}>
           <div className="space-y-4">
             <div>
               <label className="block mb-2 text-sm font-medium text-pink-800">
@@ -99,6 +180,12 @@ const Profile: React.FC = () => {
                 className="bg-pink-50/50 border-pink-200 focus:ring-pink-300"
               />
             </div>
+            <Button 
+              onClick={handleSaveProfile}
+              className="w-full bg-pink-500 hover:bg-pink-600 transition-colors"
+            >
+              <SaveIcon className="w-5 h-5 mr-2" /> Simpan Nickname
+            </Button>
           </div>
         </ProfileCard>
 

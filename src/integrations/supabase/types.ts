@@ -14,16 +14,25 @@ export type Database = {
           created_at: string
           id: string
           username: string | null
+          husband_nickname: string | null
+          wife_nickname: string | null
+          is_first_login: boolean
         }
         Insert: {
           created_at?: string
           id: string
           username?: string | null
+          husband_nickname?: string | null
+          wife_nickname?: string | null
+          is_first_login?: boolean
         }
         Update: {
           created_at?: string
           id?: string
           username?: string | null
+          husband_nickname?: string | null
+          wife_nickname?: string | null
+          is_first_login?: boolean
         }
         Relationships: []
       }

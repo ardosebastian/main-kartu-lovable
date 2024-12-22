@@ -6,9 +6,11 @@ import 'animate.css';
 interface CardProps {
   onNext: () => void;
   question: Question;
+  onTurnChange: () => void;
+  onCardFlip: (isFlipping: boolean) => void;
 }
 
-const Card: React.FC<CardProps> = ({ onNext, question }) => {
+const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
@@ -34,6 +36,7 @@ const Card: React.FC<CardProps> = ({ onNext, question }) => {
 
     if (!isFlipped) {
       setIsFlipped(true);
+      onCardFlip(true);
       if (question.hasTimer) {
         // Add a delay to show timer after card is fully flipped
         setTimeout(() => {
@@ -44,11 +47,20 @@ const Card: React.FC<CardProps> = ({ onNext, question }) => {
       setIsFlipped(false);
       setShowTimer(false);
       setIsClickable(false); // Nonaktifkan klik saat mulai shake
+
+      // Mulai sequence animasi
       setTimeout(() => {
         setIsShaking(true);
+        
+        // Setelah shake selesai
         setTimeout(() => {
           setIsShaking(false);
-          setIsClickable(true); // Aktifkan kembali klik setelah shake selesai
+          setIsClickable(true);
+          onCardFlip(false);
+          // Trigger pergantian giliran sebelum kartu berikutnya
+          onTurnChange();
+          
+          // Pindah ke kartu berikutnya
           onNext();
         }, 800);
       }, 1000);
@@ -57,10 +69,10 @@ const Card: React.FC<CardProps> = ({ onNext, question }) => {
 
   return (
     <div 
-      className="w-full flex items-center justify-center"
+      className="w-full flex items-center justify-center px-4 mt-[4.5rem] mb-20"
     >
       <div
-        className={`relative w-[85vw] md:w-[400px] aspect-[3/4] cursor-pointer perspective-1000 ${
+        className={`relative w-[85vw] md:w-[400px] h-[55vh] max-h-[500px] cursor-pointer perspective-1000 ${
           isShaking ? "animate__animated animate__shakeY" : ""
         }`}
         onClick={handleCardClick}

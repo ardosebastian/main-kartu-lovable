@@ -103,47 +103,51 @@ export const FirstLoginModal: React.FC<FirstLoginModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-white/80 backdrop-blur-lg border border-pink-100/50 rounded-2xl">
+      <DialogContent className="sm:max-w-[425px] max-w-[90%] mx-auto bg-white/95 backdrop-blur-lg border-none shadow-lg rounded-2xl">
         <DialogHeader className="bg-gradient-to-r from-pink-50 to-pink-100 p-4 -mx-6 -mt-6 rounded-t-2xl">
-          <div className="flex items-center">
-            <HeartIcon className="w-6 h-6 mr-3 text-pink-600" />
+          <div className="flex items-center justify-center">
+            <HeartIcon className="w-6 h-6 mr-3 text-pink-600 animate-pulse" />
             <DialogTitle className="text-lg font-semibold text-pink-800">
-              Selamat Datang, Pasangan!
+              Hello pasutri!
             </DialogTitle>
           </div>
-          <DialogDescription className="text-pink-600 mt-2">
-            Isi nickname pasangan untuk pengalaman lebih personal
+          <DialogDescription className="text-pink-600 mt-2 text-center">
+            Isi nama panggilan kalian untuk pengalaman lebih personal
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="husbandNickname" className="text-right text-pink-800">
-              Suami
-            </Label>
-            <Input
-              id="husbandNickname"
-              value={husbandNickname}
-              onChange={(e) => setHusbandNickname(e.target.value)}
-              className="col-span-3 border-pink-300 focus:ring-pink-500"
-              placeholder="Nickname suami"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="wifeNickname" className="text-right text-pink-800">
-              Istri
-            </Label>
-            <Input
-              id="wifeNickname"
-              value={wifeNickname}
-              onChange={(e) => setWifeNickname(e.target.value)}
-              className="col-span-3 border-pink-300 focus:ring-pink-500"
-              placeholder="Nickname istri"
-            />
+        <div className="grid gap-4 py-4 px-4">
+          <div className="max-w-[320px] mx-auto w-full space-y-4">
+            <div className="grid grid-cols-4 items-center gap-3">
+              <Label htmlFor="husbandNickname" className="text-right text-pink-800 text-sm">
+                Suami
+              </Label>
+              <Input
+                id="husbandNickname"
+                value={husbandNickname}
+                onChange={(e) => setHusbandNickname(e.target.value)}
+                className="col-span-3 border-pink-200 focus:ring-pink-500 focus:border-pink-500"
+                style={{ boxShadow: '0 0 0 2px rgba(244, 114, 182, 0.3)' }}
+                placeholder="nama panggilan suami"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-3">
+              <Label htmlFor="wifeNickname" className="text-right text-pink-800 text-sm">
+                Istri
+              </Label>
+              <Input
+                id="wifeNickname"
+                value={wifeNickname}
+                onChange={(e) => setWifeNickname(e.target.value)}
+                className="col-span-3 border-pink-200 focus:ring-pink-500 focus:border-pink-500"
+                style={{ boxShadow: '0 0 0 2px rgba(244, 114, 182, 0.3)' }}
+                placeholder="nama panggilan istri"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-2 px-4">
           <Button 
             variant="ghost" 
             onClick={handleSkip}

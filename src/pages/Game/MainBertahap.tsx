@@ -73,9 +73,7 @@ const MainBertahap = () => {
         <Header />
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        <BottomNavigation />
-      </div>
+      <BottomNavigation />
 
       <AnimatePresence>
         {showWelcome && (
@@ -97,7 +95,12 @@ const MainBertahap = () => {
             transition={{ duration: 0.5 }}
             className="flex flex-col items-center gap-6 px-4 -mt-4 md:-mt-8"
           >
-            <Card onNext={handleNext} question={questions[currentQuestion]} />
+            <Card 
+              onNext={handleNext} 
+              question={questions[currentQuestion]} 
+              onTurnChange={() => {}} 
+              onCardFlip={() => {}} 
+            />
             
             <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 w-[85vw] md:w-[400px] shadow-lg" style={{
               background: "linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 120%)"

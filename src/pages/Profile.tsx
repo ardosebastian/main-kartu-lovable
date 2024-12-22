@@ -123,12 +123,89 @@ const Profile: React.FC = () => {
     setIsResetDialogOpen(false);
   };
 
-  const handleChangePassword = () => {
-    if (newPassword !== confirmPassword) {
-      alert('Password tidak cocok');
+  const handleChangePassword = async () => {
+    // Validasi input
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.warning('Harap isi semua kolom password');
       return;
     }
-    console.log('Ganti Password');
+
+    if (newPassword !== confirmPassword) {
+      toast.error('Konfirmasi password tidak cocok');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.warning('Password minimal 6 karakter');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      // Ambil user terlebih dahulu
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        toast.error('Pengguna tidak terautentikasi');
+        return;
+      }
+
+      // Coba login ulang untuk memverifikasi password saat ini
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: user.email || '',
+        password: currentPassword
+      });
+
+      if (authError) {
+        // Tangani error login spesifik
+        switch (authError.message) {
+          case 'Invalid login credentials':
+            toast.error('Password saat ini salah');
+            break;
+          case 'Email not confirmed':
+            toast.warning('Email belum dikonfirmasi');
+            break;
+          default:
+            toast.error('Gagal memverifikasi akun');
+        }
+        return;
+      }
+
+      // Update password
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        // Tangani error update password spesifik
+        switch (error.message) {
+          case 'New password should be different from the current password':
+            toast.warning('Password baru harus berbeda dari password saat ini');
+            break;
+          case 'Password does not meet complexity requirements':
+            toast.warning('Password tidak memenuhi persyaratan keamanan');
+            break;
+          default:
+            toast.error(`Gagal mengubah password: ${error.message}`);
+        }
+        return;
+      }
+
+      // Reset state
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      
+      toast.success('Password berhasil diubah');
+    } catch (error) {
+      // Tangani error yang tidak terduga
+      const errorMessage = error instanceof Error ? error.message : 'Kesalahan tidak dikenal';
+      toast.error(`Terjadi kesalahan: ${errorMessage}`);
+      console.error('Unexpected error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isLoading) {
@@ -166,7 +243,8 @@ const Profile: React.FC = () => {
                 value={husbandNickname}
                 onChange={(e) => setHusbandNickname(e.target.value)}
                 placeholder="Masukkan nama panggilan suami"
-                className="bg-pink-50/50 border-pink-200 focus:ring-pink-300"
+                className="bg-pink-50/50 border-pink-200 focus:ring-pink-500 focus:border-pink-500"
+                style={{ boxShadow: '0 0 0 2px rgba(244, 114, 182, 0.3)' }}
               />
             </div>
             <div>
@@ -177,14 +255,15 @@ const Profile: React.FC = () => {
                 value={wifeNickname}
                 onChange={(e) => setWifeNickname(e.target.value)}
                 placeholder="Masukkan nama panggilan istri"
-                className="bg-pink-50/50 border-pink-200 focus:ring-pink-300"
+                className="bg-pink-50/50 border-pink-200 focus:ring-pink-500 focus:border-pink-500"
+                style={{ boxShadow: '0 0 0 2px rgba(244, 114, 182, 0.3)' }}
               />
             </div>
             <Button 
               onClick={handleSaveProfile}
               className="w-full bg-pink-500 hover:bg-pink-600 transition-colors"
             >
-              <SaveIcon className="w-5 h-5 mr-2" /> Simpan Nickname
+              <SaveIcon className="w-5 h-5 mr-2" /> Simpan
             </Button>
           </div>
         </ProfileCard>
@@ -200,7 +279,8 @@ const Profile: React.FC = () => {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="Masukkan password saat ini"
-                className="bg-pink-50/50 border-pink-200 focus:ring-pink-300 pr-10"
+                className="bg-pink-50/50 border-pink-200 focus:ring-pink-500 focus:border-pink-500 pr-10"
+                style={{ boxShadow: '0 0 0 2px rgba(244, 114, 182, 0.3)' }}
               />
               <button 
                 type="button"
@@ -223,7 +303,8 @@ const Profile: React.FC = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Masukkan password baru"
-                className="bg-pink-50/50 border-pink-200 focus:ring-pink-300"
+                className="bg-pink-50/50 border-pink-200 focus:ring-pink-500 focus:border-pink-500"
+                style={{ boxShadow: '0 0 0 2px rgba(244, 114, 182, 0.3)' }}
               />
             </div>
             <div>
@@ -235,7 +316,8 @@ const Profile: React.FC = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Konfirmasi password baru"
-                className="bg-pink-50/50 border-pink-200 focus:ring-pink-300"
+                className="bg-pink-50/50 border-pink-200 focus:ring-pink-500 focus:border-pink-500"
+                style={{ boxShadow: '0 0 0 2px rgba(244, 114, 182, 0.3)' }}
               />
             </div>
             <Button 

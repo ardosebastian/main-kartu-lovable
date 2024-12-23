@@ -29,16 +29,30 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+          // Clear any stale session data
+          await supabase.auth.signOut();
+          localStorage.removeItem("sb-suzbpqdwrzqydsozlele-auth-token");
+        }
+        
         setIsAuthenticated(!!session);
       } catch (error) {
         console.error("Error checking auth status:", error);
         setIsAuthenticated(false);
+        // Clear session on error
+        await supabase.auth.signOut();
+        localStorage.removeItem("sb-suzbpqdwrzqydsozlele-auth-token");
       }
     };
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!session) {
+        // Clear session data when auth state changes to signed out
+        localStorage.removeItem("sb-suzbpqdwrzqydsozlele-auth-token");
+      }
       setIsAuthenticated(!!session);
     });
 

@@ -24,12 +24,10 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
   }, [question, isFlipped]);
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Jika kartu sedang dalam animasi shake atau tidak bisa diklik, abaikan klik
     if (!isClickable || isShaking) {
       return;
     }
 
-    // Jika klik berasal dari timer, abaikan flip
     if ((e.target as HTMLElement).closest('.timer-container')) {
       return;
     }
@@ -38,29 +36,23 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
       setIsFlipped(true);
       onCardFlip(true);
       if (question.hasTimer) {
-        // Add a delay to show timer after card is fully flipped
         setTimeout(() => {
           setShowTimer(true);
-        }, 500); // 500ms delay to ensure card flip animation completes
+        }, 500);
       }
     } else {
       setIsFlipped(false);
       setShowTimer(false);
-      setIsClickable(false); // Nonaktifkan klik saat mulai shake
+      setIsClickable(false);
 
-      // Mulai sequence animasi
       setTimeout(() => {
         setIsShaking(true);
         
-        // Setelah shake selesai
         setTimeout(() => {
           setIsShaking(false);
           setIsClickable(true);
           onCardFlip(false);
-          // Trigger pergantian giliran sebelum kartu berikutnya
           onTurnChange();
-          
-          // Pindah ke kartu berikutnya
           onNext();
         }, 800);
       }, 1000);
@@ -72,7 +64,7 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
       className="w-full flex items-center justify-center px-4 mt-[4.5rem] mb-20"
     >
       <div
-        className={`relative w-[85vw] md:w-[400px] h-[55vh] max-h-[500px] cursor-pointer perspective-1000 ${
+        className={`relative w-[85vw] md:w-[400px] h-[75vh] max-h-[75vh] min-h-[300px] cursor-pointer perspective-1000 ${
           isShaking ? "animate__animated animate__shakeY" : ""
         }`}
         onClick={handleCardClick}

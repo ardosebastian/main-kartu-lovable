@@ -61,10 +61,10 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
 
   return (
     <div 
-      className="w-full flex-1 flex items-center justify-center px-4 py-8"
+      className="w-full flex-1 flex items-center justify-center px-4 py-8 pb-20"
     >
       <div
-        className={`relative w-[85vw] md:w-[400px] aspect-[3/4] max-h-[75vh] cursor-pointer perspective-1000 ${
+        className={`relative w-[85vw] md:w-[400px] aspect-[3/4] max-h-[calc(100vh-13rem)] cursor-pointer perspective-1000 ${
           isShaking ? "animate__animated animate__shakeY" : ""
         }`}
         onClick={handleCardClick}

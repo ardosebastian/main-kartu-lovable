@@ -71,12 +71,13 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
 
   return (
     <div 
-      className="w-full flex-1 flex items-center justify-center px-4 py-4 pb-16"
+      className="w-full flex-1 flex items-center justify-center px-4 py-4 pb-24"
     >
       <div
-        className={`relative w-[85vw] md:w-[400px] min-h-[300px] cursor-pointer perspective-1000 
+        className={`relative w-[85vw] md:w-[400px] cursor-pointer perspective-1000 
           ${isShaking ? "animate__animated animate__shakeY" : ""}
-          ${windowHeight > 700 ? "aspect-[3/4]" : "h-[calc(100vh-16rem)]"}`}
+          ${windowHeight > 700 ? "aspect-[3/4]" : "h-[calc(100vh-16rem)]"}
+          sm:aspect-[3/4] md:aspect-[3/4]`}
         onClick={handleCardClick}
       >
         <div
@@ -94,7 +95,7 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
             <img 
               src="https://res.cloudinary.com/dwwf2eqhc/image/upload/v1734390558/logo-kikuk_j1c4wu.svg" 
               alt="Kartu Kikuk Logo" 
-              className={`${windowHeight < 700 ? "w-16 h-16" : "w-24 md:w-32 h-24 md:h-32"} object-contain`}
+              className={`${windowHeight < 500 ? "w-20 h-20" : "w-24 md:w-32 h-24 md:h-32"} object-contain`}
               loading="lazy"
               decoding="async"
               width={128}
@@ -107,10 +108,10 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
             className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-3 md:p-6 flex flex-col"
           >
             <div className="flex-grow flex flex-col items-center justify-center text-center font-rounded p-2">
-              <h3 className={`${windowHeight < 700 ? "text-sm" : "text-base md:text-xl"} font-bold mb-2 tracking-tight`}>
+              <h3 className={`${windowHeight < 500 ? "text-sm" : "text-base md:text-xl"} font-bold mb-2 tracking-tight`}>
                 {currentQuestion.type === "challenge" ? "Tantangan" : "Pertanyaan"}
               </h3>
-              <p className={`${windowHeight < 700 ? "text-xs" : "text-sm md:text-lg"}`}>
+              <p className={`${windowHeight < 500 ? "text-base" : "text-lg md:text-xl"}`}>
                 {currentQuestion.text}
               </p>
             </div>

@@ -59,7 +59,7 @@ export const TurnSelectionModal = ({
   return (
     <Dialog open={isOpen} onOpenChange={() => false}>
       <DialogContent 
-        className="sm:max-w-md w-[90vw] max-w-[350px] rounded-3xl overflow-hidden flex items-center justify-center border-none outline-none [&>button.absolute]:hidden"
+        className="sm:max-w-md w-[90vw] max-w-[350px] rounded-3xl overflow-hidden flex items-center justify-center border-none outline-none focus:outline-none focus:ring-0 hover:border-none [&>button.absolute]:hidden"
         style={{
           background: "linear-gradient(135deg, #2C2C2C 0%, #3A3A3A 48%, #4A4A4A 100%)",
         }}

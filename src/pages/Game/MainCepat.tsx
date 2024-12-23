@@ -306,7 +306,7 @@ const MainCepat = () => {
       >
         <div className="w-full max-w-md px-4 py-8 flex flex-col items-center">
           {currentTurn && (
-            <div className="turn-text-container">
+            <div className="turn-text-container -mt-2">
               <p className="text-pink-500 font-bold text-xl turn-text text-center">
                 {currentTurn} buka kartunya
               </p>
@@ -318,7 +318,7 @@ const MainCepat = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="flex flex-col items-center gap-0 px-4 -mt-4 md:-mt-8"
+                className="flex flex-col items-center gap-0 px-4 -mt-2 md:-mt-4 md:mt-2"
               >
                 <Card 
                   onNext={handleNext} 

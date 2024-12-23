@@ -16,6 +16,16 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
   const [showTimer, setShowTimer] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(question);
   const [isClickable, setIsClickable] = useState(true);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!isFlipped) {
@@ -61,12 +71,12 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
 
   return (
     <div 
-      className="w-full flex-1 flex items-center justify-center px-4 py-8 pb-20"
+      className="w-full flex-1 flex items-center justify-center px-4 py-4 pb-16"
     >
       <div
         className={`relative w-[85vw] md:w-[400px] min-h-[300px] cursor-pointer perspective-1000 
           ${isShaking ? "animate__animated animate__shakeY" : ""}
-          ${window.innerHeight > 700 ? "aspect-[3/4]" : "h-[calc(100vh-13rem)]"}`}
+          ${windowHeight > 700 ? "aspect-[3/4]" : "h-[calc(100vh-16rem)]"}`}
         onClick={handleCardClick}
       >
         <div
@@ -78,13 +88,13 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
           <div
             className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl p-4 md:p-6 flex items-center justify-center"
             style={{
-              background: "linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)",
+              background: "linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)"
             }}
           >
             <img 
               src="https://res.cloudinary.com/dwwf2eqhc/image/upload/v1734390558/logo-kikuk_j1c4wu.svg" 
               alt="Kartu Kikuk Logo" 
-              className="w-24 md:w-32 h-24 md:h-32 object-contain"
+              className={`${windowHeight < 700 ? "w-16 h-16" : "w-24 md:w-32 h-24 md:h-32"} object-contain`}
               loading="lazy"
               decoding="async"
               width={128}
@@ -96,11 +106,11 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
           <div
             className="absolute w-full h-full backface-hidden rounded-3xl shadow-xl rotate-y-180 bg-white p-3 md:p-6 flex flex-col"
           >
-            <div className="flex-grow flex flex-col items-center justify-center text-center font-rounded">
-              <h3 className="text-base md:text-xl font-bold mb-2 md:mb-4 tracking-tight">
+            <div className="flex-grow flex flex-col items-center justify-center text-center font-rounded p-2">
+              <h3 className={`${windowHeight < 700 ? "text-sm" : "text-base md:text-xl"} font-bold mb-2 tracking-tight`}>
                 {currentQuestion.type === "challenge" ? "Tantangan" : "Pertanyaan"}
               </h3>
-              <p className="text-sm md:text-lg">
+              <p className={`${windowHeight < 700 ? "text-xs" : "text-sm md:text-lg"}`}>
                 {currentQuestion.text}
               </p>
             </div>

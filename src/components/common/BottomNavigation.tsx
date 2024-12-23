@@ -1,78 +1,59 @@
 import React, { useState } from 'react';
-import { BookOpenIcon, UserIcon, TimerIcon, TrophyIcon } from 'lucide-react';
+import { BookOpenIcon, UserIcon, HeartIcon, HelpCircleIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNavigation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeMenu, setActiveMenu] = useState<'tutorial' | 'profile' | 'main-cepat' | 'main-bertahap'>('main-cepat');
+  const [activeMenu, setActiveMenu] = useState<'tutorial' | 'profile' | 'main-cepat'>('main-cepat');
 
   const menuItems = [
     {
-      icon: TimerIcon,
-      label: 'Main Cepat',
+      icon: <HeartIcon className="h-6 w-6" />,
+      label: 'play',
       value: 'main-cepat',
       href: '/main-cepat',
-      onClick: () => {
-        // Tambahkan logika khusus jika diperlukan
-      }
     },
     {
-      icon: TrophyIcon,
-      label: 'Main Bertahap',
-      value: 'main-bertahap',
-      href: '/main-bertahap',
-      onClick: () => {
-        // Tambahkan logika khusus jika diperlukan
-      }
-    },
-    {
-      icon: BookOpenIcon,
+      icon: <HelpCircleIcon className="h-6 w-6" />,
       label: 'Tutorial',
       value: 'tutorial',
-      href: '/tutorial'
+      href: '/tutorial',
     },
     {
-      icon: UserIcon,
-      label: 'Profile',
+      icon: <UserIcon className="h-6 w-6" />,
+      label: 'Profil',
       value: 'profile',
-      href: '/profile'
+      href: '/profile',
     }
   ];
 
   const handleMenuClick = (item: typeof menuItems[number]) => {
-    setActiveMenu(item.value as "tutorial" | "profile" | "main-cepat" | "main-bertahap");
+    setActiveMenu(item.value as "tutorial" | "profile" | "main-cepat");
     navigate(item.href);
-    if (item.onClick) {
-      item.onClick();
-    }
   };
 
   return (
-    <div 
-      className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-[0_-2px_4px_rgba(0,0,0,0.1)] z-50 md:hidden"
-    >
-      <div className="flex justify-around py-4 px-4">
-        {menuItems.map((item) => (
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe">
+      <div className="grid grid-cols-3 h-24">
+        {menuItems.map((item, index) => (
           <button
             key={item.value}
             onClick={() => handleMenuClick(item)}
             className={cn(
-              "flex flex-col items-center justify-center text-gray-500 hover:text-pink-400",
+              "flex flex-col items-center justify-center gap-2 text-gray-500 transition-colors",
               location.pathname === item.href ? "text-pink-600" : ""
             )}
           >
-            <item.icon 
-              className={cn(
-                "w-[26px] h-[26px] mb-1"
-              )}
-            />
-            <span className="text-xs font-medium">{item.label}</span>
+            <div className="w-6 h-6">
+              {item.icon}
+            </div>
+            <span className="text-xs font-medium leading-none">{item.label}</span>
           </button>
         ))}
       </div>
-    </div>
+    </nav>
   );
 };
 

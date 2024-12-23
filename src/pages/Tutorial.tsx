@@ -20,10 +20,9 @@ const Tutorial: React.FC = () => {
         </div>
 
         <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">🏆 Mode Permainan</h2>
-          <ul className="list-disc list-inside text-gray-600 space-y-2">
-            <li>Main Cepat: Jawab pertanyaan secepat mungkin</li>
-            <li>Main Bertahap: Tingkatkan level secara bertahap</li>
+          <h2 className="text-xl font-bold mb-2">Mode Permainan</h2>
+          <ul className="list-disc pl-5 space-y-2 mb-4">
+            <li>Main Cepat: Mainkan kartu secara acak dari semua level</li>
           </ul>
         </div>
 

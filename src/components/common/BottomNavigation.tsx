@@ -36,7 +36,7 @@ const BottomNavigation: React.FC = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe">
-      <div className="grid grid-cols-3 h-24">
+      <div className="grid grid-cols-3 h-20">
         {menuItems.map((item, index) => (
           <button
             key={item.value}

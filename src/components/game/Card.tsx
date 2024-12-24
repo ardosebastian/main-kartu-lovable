@@ -8,15 +8,27 @@ interface CardProps {
   question: Question;
   onTurnChange: () => void;
   onCardFlip: (isFlipping: boolean) => void;
+  isFlipped: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+const Card: React.FC<CardProps> = ({ 
+  onNext, 
+  question, 
+  onTurnChange, 
+  onCardFlip,
+  isFlipped: parentIsFlipped 
+}) => {
+  const [localIsFlipped, setLocalIsFlipped] = useState(parentIsFlipped);
   const [isShaking, setIsShaking] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(question);
   const [isClickable, setIsClickable] = useState(true);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+  // Sync local state dengan parent state
+  useEffect(() => {
+    setLocalIsFlipped(parentIsFlipped);
+  }, [parentIsFlipped]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,10 +40,10 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
   }, []);
 
   useEffect(() => {
-    if (!isFlipped) {
+    if (!localIsFlipped) {
       setCurrentQuestion(question);
     }
-  }, [question, isFlipped]);
+  }, [question, localIsFlipped]);
 
   const handleCardClick = (e: React.MouseEvent) => {
     if (!isClickable || isShaking) {
@@ -42,8 +54,8 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
       return;
     }
 
-    if (!isFlipped) {
-      setIsFlipped(true);
+    if (!localIsFlipped) {
+      setLocalIsFlipped(true);
       onCardFlip(true);
       if (question.hasTimer) {
         setTimeout(() => {
@@ -51,7 +63,7 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
         }, 500);
       }
     } else {
-      setIsFlipped(false);
+      setLocalIsFlipped(false);
       setShowTimer(false);
       setIsClickable(false);
 
@@ -82,7 +94,7 @@ const Card: React.FC<CardProps> = ({ onNext, question, onTurnChange, onCardFlip 
       >
         <div
           className={`relative w-full h-full transition-all duration-500 transform-style-3d ${
-            isFlipped ? "animate-flip" : "animate-flip-back"
+            localIsFlipped ? "animate-flip" : "animate-flip-back"
           }`}
         >
           {/* Front of card */}

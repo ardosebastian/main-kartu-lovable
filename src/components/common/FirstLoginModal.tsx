@@ -53,6 +53,17 @@ export const FirstLoginModal: React.FC<FirstLoginModalProps> = ({
 
         if (!isFirstLogin) {
           toast.success('Nickname berhasil disimpan');
+          // Hapus localStorage turnSelected
+          localStorage.removeItem('turnSelected');
+          
+          // Kirim event custom
+          window.dispatchEvent(new CustomEvent('nicknames-updated', { 
+            detail: { 
+              husbandNickname: husbandNickname.trim(), 
+              wifeNickname: wifeNickname.trim() 
+            } 
+          }));
+          
           onClose();
         } else {
           toast.warning('Silakan lengkapi nickname pasangan');

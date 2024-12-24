@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
@@ -19,24 +19,23 @@ export const TurnSelectionModal = ({
   wifeNickname,
   onTurnSelected,
 }: TurnSelectionModalProps) => {
-  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentPlayers, setCurrentPlayers] = useState([
     husbandNickname, 
     wifeNickname
   ]);
 
+  console.log('Turn Selection Modal rendered:', { isOpen, husbandNickname, wifeNickname });
+
   const randomizeTurn = () => {
     setIsAnimating(true);
     const finalPlayer = Math.random() < 0.5 ? husbandNickname : wifeNickname;
     
-    // Animasi acak dengan kedua nama
     let count = 0;
-    const maxFlips = 20; // Tambah jumlah flip
+    const maxFlips = 20;
     const flipInterval = setInterval(() => {
       count++;
       
-      // Acak urutan nama dengan cepat
       setCurrentPlayers(prev => {
         const shuffled = [...prev].sort(() => Math.random() - 0.5);
         return shuffled;
@@ -44,20 +43,18 @@ export const TurnSelectionModal = ({
       
       if (count >= maxFlips) {
         clearInterval(flipInterval);
-        
-        // Atur pemenang di posisi pertama
-        setCurrentPlayers([finalPlayer, 
+        setCurrentPlayers([
+          finalPlayer, 
           finalPlayer === husbandNickname ? wifeNickname : husbandNickname
         ]);
-        
         setIsAnimating(false);
         onTurnSelected(finalPlayer);
       }
-    }, 80); // Percepat interval
+    }, 80);
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => false}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
         className="sm:max-w-md w-[90vw] max-w-[350px] rounded-3xl overflow-hidden flex items-center justify-center border-none outline-none focus:outline-none focus:ring-0 hover:border-none [&>button.absolute]:hidden"
         style={{
@@ -79,21 +76,13 @@ export const TurnSelectionModal = ({
               {currentPlayers.map((player, index) => (
                 <motion.div
                   key={player}
-                  initial={{ 
-                    opacity: 0,
-                    scale: 1,
-                    y: 20
-                  }}
+                  initial={{ opacity: 0, scale: 1, y: 20 }}
                   animate={{ 
                     opacity: 1,
                     scale: index === 0 && !isAnimating ? 1.3 : 1,
                     y: 0
                   }}
-                  exit={{ 
-                    opacity: 0,
-                    scale: 1,
-                    y: -20
-                  }}
+                  exit={{ opacity: 0, scale: 1, y: -20 }}
                   transition={{ 
                     duration: 0.3,
                     type: "spring",

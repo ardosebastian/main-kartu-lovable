@@ -119,8 +119,19 @@ const Profile: React.FC = () => {
   };
 
   const handleResetGame = () => {
-    console.log('Reset Game');
+    // Reset localStorage
+    localStorage.removeItem('currentTurn');
+    localStorage.removeItem('turnSelected');
+    localStorage.removeItem('game_state');
+    
+    // Tutup dialog
     setIsResetDialogOpen(false);
+    
+    // Tampilkan notifikasi
+    toast.success('Permainan berhasil direset');
+    
+    // Opsional: Redirect ke halaman game atau refresh
+    // Misalnya: navigate('/game/main-cepat')
   };
 
   const handleChangePassword = async () => {

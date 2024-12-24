@@ -203,7 +203,12 @@ const MainCepat = () => {
           if (!data.husband_nickname || !data.wife_nickname) {
             console.log('Nickname kosong, mereset state');
             // Reset semua state terkait permainan
-            resetGame();
+            setCurrentTurn(null);
+            setShowTurnSelection(true);
+            setCurrentQuestion(0);
+            setCurrentLevel(1);
+            setQuestionsCompleted(0);
+            setIsFlipped(false);  // Reset kartu
             setPlayerData({
               husbandNickname: null,
               wifeNickname: null
@@ -223,7 +228,7 @@ const MainCepat = () => {
           // Reset semua state permainan jika belum pernah memilih turn
           if (!turnSelected && data.husband_nickname && data.wife_nickname) {
             console.log('Showing turn selection modal');
-            resetGame(); // Reset game state
+            setCurrentTurn(null);
             setShowTurnSelection(true);
           } 
           // Jika tidak ada turn tersimpan, gunakan salah satu nickname
@@ -234,7 +239,12 @@ const MainCepat = () => {
           }
         } else {
           // Jika tidak ada user (logout), reset semua state
-          resetGame();
+          setCurrentTurn(null);
+          setShowTurnSelection(true);
+          setCurrentQuestion(0);
+          setCurrentLevel(1);
+          setQuestionsCompleted(0);
+          setIsFlipped(false);  // Reset kartu
         }
       } catch (error) {
         console.error('Error fetching player data:', error);
@@ -368,30 +378,6 @@ const MainCepat = () => {
     }
   };
 
-  // Handler untuk reset permainan
-  const resetGame = () => {
-    // Reset localStorage
-    localStorage.removeItem('currentTurn');
-    localStorage.removeItem('turnSelected');
-    localStorage.removeItem('game_state');
-    
-    // Reset state
-    setCurrentTurn(null);
-    setShowTurnSelection(true);
-    
-    // Reset pertanyaan dan level
-    setCurrentQuestion(0);
-    setCurrentLevel(1);
-    setQuestionsCompleted(0);
-    setIsFlipped(false);  // Reset kartu
-    
-    // Tampilkan toast
-    toast.info('Permainan direset', {
-      description: 'Silakan pilih giliran ulang',
-      duration: 3000,
-    });
-  };
-
   return (
     <div>
       <style>{fadeAnimation}</style>
@@ -419,18 +405,21 @@ const MainCepat = () => {
         <div className="w-full max-w-md px-4 py-8 flex flex-col items-center">
           {currentTurn && (
             <div className="turn-text-container -mt-2">
-              <p className="text-pink-500 font-bold text-xl turn-text text-center">
+              <motion.p 
+                key={currentTurn} 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  type: "spring", 
+                  stiffness: 300, 
+                  damping: 20 
+                }}
+                className="text-pink-500 font-bold text-xl turn-text text-center"
+              >
                 {currentTurn} buka kartunya
-              </p>
+              </motion.p>
             </div>
           )}
-
-          <button
-            onClick={resetGame}
-            className="mb-4 px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
-          >
-            Reset Permainan
-          </button>
 
           <AnimatePresence>
             {!showWelcome && (
